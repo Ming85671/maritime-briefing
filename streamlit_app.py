@@ -73,6 +73,7 @@ with st.sidebar:
         "拖入或选择 PDF 周报",
         type=["pdf"],
         accept_multiple_files=True,
+        disabled=not api_configured,
         help="最多 10 份，所有文件合计不超过 50 MB。上传文件仅在本次分析内存中使用。",
     )
     st.caption("建议上传同一周或相邻发布日的报告；系统会将时间差和真正分歧分开标注。")
