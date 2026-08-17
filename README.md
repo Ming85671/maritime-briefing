@@ -1,6 +1,6 @@
 # Maritime Briefing
 
-一个用于“多份航运周报 -> 可追溯周度观点”的 Streamlit 私有应用。浏览器界面不内嵌或复述报告全文，只呈现综合后的短观点和报告/页码坐标。
+一个用于“多份航运周报 -> 可追溯周度观点”的 Streamlit 应用。浏览器界面不内嵌或复述报告全文，只呈现综合后的短观点和报告/页码坐标。
 
 ## 已用样本验证的输出规则
 
@@ -29,20 +29,21 @@ OPENAI_API_KEY="你的服务器端密钥" streamlit run streamlit_app.py
 
 没有设置 `OPENAI_API_KEY` 时，仍可打开样本预览；上传新文件会得到明确的“未配置 API key”提示，绝不会假装已经分析成功。
 
-## Streamlit Community Cloud 部署
+## Streamlit Community Cloud 部署（公开应用）
 
-1. 将此文件夹推送至**私有** GitHub 仓库（不要提交原始 PDF 或密钥）。
+1. 将此文件夹推送至 GitHub 仓库（不要提交原始 PDF 或密钥）。
 2. 在 Streamlit Community Cloud 中选择该仓库，入口文件填写 `streamlit_app.py`。
 3. 在 **App settings → Secrets** 添加：
 
 ```toml
 OPENAI_API_KEY = "你的服务端 API key"
 OPENAI_MODEL = "gpt-5.6-terra" # 可选
+APP_ACCESS_PASSWORD = "为上传与分析功能设置的强密码"
 ```
 
-4. 在 Share 中选择仅指定人员可访问，并按邮箱邀请使用者。
+4. 在 Share 中选择公开。所有人可以查看样本预览；只有输入 `APP_ACCESS_PASSWORD` 的人可以上传 PDF 或触发模型调用。
 
-应用只在分析期间于内存读取上传的文件，不会在代码库中保存 PDF。模型服务本身的数据保留政策请按你的 API 项目设置确认。
+应用只在分析期间于内存读取上传的文件，不会在代码库中保存 PDF。模型服务本身的数据保留政策请按你的 API 项目设置确认。不要把访问密码或 API key 放入代码库。
 
 ## 已实现的分析 API
 

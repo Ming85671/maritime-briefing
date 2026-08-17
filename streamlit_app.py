@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import os
+import hmac
 from typing import Any
 
 import streamlit as st
@@ -28,6 +29,25 @@ def get_secret(name: str) -> str | None:
     return str(value) if value else os.environ.get(name)
 
 
+def analysis_access_granted() -> bool:
+    """Keep a public app from becoming an unauthenticated API-cost endpoint."""
+    configured_password = get_secret("APP_ACCESS_PASSWORD")
+    if not configured_password:
+        st.warning("分析功能尚未启用：管理员需在 Secrets 配置 APP_ACCESS_PASSWORD。")
+        return False
+    if st.session_state.get("analysis_access"):
+        return True
+
+    candidate = st.text_input("分析访问密码", type="password")
+    if st.button("解锁分析", width="stretch"):
+        if hmac.compare_digest(candidate, configured_password):
+            st.session_state["analysis_access"] = True
+            st.rerun()
+        else:
+            st.error("密码不正确。")
+    return False
+
+
 def render_evidence(evidence: list[dict[str, Any]]) -> None:
     for item in evidence:
         source = item.get("source", "未命名来源")
@@ -43,6 +63,7 @@ st.caption("先逐份提取带页码的证据，再跨报告整合观点。报�
 
 with st.sidebar:
     st.header("本期上传")
+    can_analyze = analysis_access_granted()
     uploads = st.file_uploader(
         "拖入或选择 PDF 周报",
         type=["pdf"],
@@ -50,9 +71,9 @@ with st.sidebar:
         help="最多 10 份，所有文件合计不超过 50 MB。上传文件仅在本次分析内存中使用。",
     )
     st.caption("建议上传同一周或相邻发布日的报告；系统会将时间差和真正分歧分开标注。")
-    run = st.button("生成本期观点", type="primary", width="stretch", disabled=not uploads)
+    run = st.button("生成本期观点", type="primary", width="stretch", disabled=not uploads or not can_analyze)
     st.divider()
-    st.caption("仅基于上传材料的研究工具，不构成投资、交易或租船建议。")
+    st.caption("公开页面仅展示样本；解锁后的分析使用服务器端模型密钥。仅基于上传材料的研究工具，不构成投资、交易或租船建议。")
 
 if run:
     total_bytes = sum(upload.size for upload in uploads)
