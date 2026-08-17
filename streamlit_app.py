@@ -50,7 +50,7 @@ with st.sidebar:
         help="最多 10 份，所有文件合计不超过 50 MB。上传文件仅在本次分析内存中使用。",
     )
     st.caption("建议上传同一周或相邻发布日的报告；系统会将时间差和真正分歧分开标注。")
-    run = st.button("生成本期观点", type="primary", use_container_width=True, disabled=not uploads)
+    run = st.button("生成本期观点", type="primary", width="stretch", disabled=not uploads)
     st.divider()
     st.caption("仅基于上传材料的研究工具，不构成投资、交易或租船建议。")
 
@@ -108,7 +108,7 @@ else:
     st.subheader("已核对样本来源")
     st.dataframe(
         [{"报告": name, "日期": date, "覆盖": focus} for name, date, focus in SAMPLE_SOURCES],
-        use_container_width=True,
+        width="stretch",
         hide_index=True,
     )
     st.subheader("输出规则")
