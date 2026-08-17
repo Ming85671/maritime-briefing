@@ -63,7 +63,12 @@ st.caption("先逐份提取带页码的证据，再跨报告整合观点。报�
 
 with st.sidebar:
     st.header("本期上传")
-    can_analyze = analysis_access_granted()
+    api_configured = bool(get_secret("OPENAI_API_KEY"))
+    if api_configured:
+        can_analyze = analysis_access_granted()
+    else:
+        can_analyze = False
+        st.info("当前为样本预览模式：未配置模型 API，因此不能分析新上传的报告。")
     uploads = st.file_uploader(
         "拖入或选择 PDF 周报",
         type=["pdf"],
@@ -73,7 +78,7 @@ with st.sidebar:
     st.caption("建议上传同一周或相邻发布日的报告；系统会将时间差和真正分歧分开标注。")
     run = st.button("生成本期观点", type="primary", width="stretch", disabled=not uploads or not can_analyze)
     st.divider()
-    st.caption("公开页面仅展示样本；解锁后的分析使用服务器端模型密钥。仅基于上传材料的研究工具，不构成投资、交易或租船建议。")
+    st.caption("公开页面仅展示样本；配置模型密钥后才可分析新报告。仅基于上传材料的研究工具，不构成投资、交易或租船建议。")
 
 if run:
     total_bytes = sum(upload.size for upload in uploads)

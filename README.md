@@ -45,6 +45,8 @@ APP_ACCESS_PASSWORD = "为上传与分析功能设置的强密码"
 
 应用只在分析期间于内存读取上传的文件，不会在代码库中保存 PDF。模型服务本身的数据保留政策请按你的 API 项目设置确认。不要把访问密码或 API key 放入代码库。
 
+如果不配置任何 Secrets，应用可作为公开的样本预览页面运行，但无法读取或综合新上传的 PDF。Streamlit Cloud 本身不提供用于报告理解的模型额度；要实现每周自动分析，之后仍需接入一个模型服务的 API key。
+
 ## 已实现的分析 API
 
 `analysis_engine.py` 逐份读取上传 PDF 并用 Responses API 提取证据卡片，再只以这些卡片做第二次综合。API key 只从 Streamlit Secrets 或服务器环境变量读取，不会发送到浏览器。当前 OpenAI 文件输入支持用 `input_file` 传 PDF；启用视觉能力的模型会同时读取文本与页面图像，因此适合包含图表和小字的航运报告。[官方 File inputs 文档](https://developers.openai.com/api/docs/guides/file-inputs)
