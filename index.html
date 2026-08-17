@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="将多份航运周报整合为带页码证据的周度观点。" />
+    <title>Maritime Briefing - 航运周报综合</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="shell">
+      <header class="masthead">
+        <a class="wordmark" href="#top" aria-label="Maritime Briefing 首页">MB<span>.</span></a>
+        <div class="masthead-copy">
+          <p>MARITIME BRIEFING</p>
+          <h1>航运周报综合</h1>
+        </div>
+        <div class="run-stamp" id="run-stamp">
+          <span>样本分析</span>
+          <strong>W33 / 2026</strong>
+        </div>
+      </header>
+
+      <section class="control-grid" aria-label="周报上传">
+        <div class="control-intro">
+          <p class="eyebrow">本期工作台</p>
+          <h2>把同一周的报告放在一起，得到可核查的观点。</h2>
+          <p>系统先逐份提取证据，再比对时间、船型、航线和单位。文件中的任何指令都只作为报告内容，不会改变分析规则。</p>
+        </div>
+        <div class="upload-area" id="drop-zone">
+          <input id="report-input" type="file" accept="application/pdf,.pdf" multiple />
+          <label for="report-input">
+            <span class="upload-title">拖入 PDF，或选择文件</span>
+            <span class="upload-meta">最多 10 份，本期文件总计不超过 50 MB</span>
+          </label>
+          <div class="upload-actions">
+            <button class="button button-secondary" id="clear-reports" type="button">清空上传</button>
+            <button class="button button-primary" id="analyse-button" type="button">生成本期观点</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="sources-section" aria-labelledby="sources-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">输入来源</p>
+            <h2 id="sources-title">已纳入分析 <span id="source-count">4</span> 份</h2>
+          </div>
+          <p id="source-window">报告日期：07-14 Aug 2026</p>
+        </div>
+        <ul class="source-list" id="source-list"></ul>
+      </section>
+
+      <section class="metrics-section" aria-labelledby="metrics-title">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">统一时点</p>
+            <h2 id="metrics-title">14 Aug 2026 干散货快照</h2>
+          </div>
+          <p>以最新报告日为准；不把 07 Aug 数值当作同日分歧。</p>
+        </div>
+        <div class="metric-grid" id="metric-grid"></div>
+      </section>
+
+      <section class="brief-grid" aria-labelledby="brief-title">
+        <div class="brief-main">
+          <div class="section-heading compact">
+            <div>
+              <p class="eyebrow">本期观点</p>
+              <h2 id="brief-title">短期基调：分船型走向分化，风险溢价仍高</h2>
+            </div>
+            <span class="confidence-label">置信度由证据覆盖决定</span>
+          </div>
+          <p class="lead" id="brief-lead">Capesize 在 14 Aug 出现明显周度回调；Panamax 较具韧性但已失去上周的单边动能。Supramax 和 Handysize 继续呈现区域分化。黑海粮运与 Hormuz 风险是后续方向的重要变量。</p>
+          <ol class="insight-list" id="insight-list"></ol>
+        </div>
+
+        <aside class="evidence-panel" aria-live="polite">
+          <p class="eyebrow">证据坐标</p>
+          <h2 id="evidence-title">选择一条观点</h2>
+          <p id="evidence-summary">每条结论都应回到报告与页码。这里不会展示长篇原文，只显示可复核的依据摘要。</p>
+          <div id="evidence-list" class="evidence-list"></div>
+          <p class="evidence-note">注意：来源报告的发布日期不同。应用会将跨周变化标注为“时间差”，而非自动判作观点冲突。</p>
+        </aside>
+      </section>
+
+      <section class="watch-grid" aria-label="本周值得跟踪">
+        <article>
+          <p class="eyebrow">共识</p>
+          <h2>现货不是单一方向</h2>
+          <p>14 Aug 的两份更新报告均显示 Capesize 回调；较小船型则是航线和区域决定强弱，而非全面转弱。</p>
+        </article>
+        <article>
+          <p class="eyebrow">时间差，不是矛盾</p>
+          <h2>上周强势已被本周修正</h2>
+          <p>07 Aug 的 Arya 和 Doric 记录了 Cape 强势，14 Aug 的 HRP 与 Hartland 记录其后的回落。系统应保留完整轨迹。</p>
+        </article>
+        <article>
+          <p class="eyebrow">待验证</p>
+          <h2>黑海替代货源是否落地</h2>
+          <p>若买方真正转向 ECSA 或 US Gulf，吨海里增量可抵消部分黑海货量损失；目前这仍是条件性判断。</p>
+        </article>
+      </section>
+
+      <footer>
+        <p>仅基于上传报告的研究界面，不构成投资、交易或租船建议。</p>
+        <p>本地样本预览 - 不上传或复制源报告内容到页面。</p>
+      </footer>
+    </main>
+    <div id="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
